@@ -20,6 +20,8 @@ OUTPUT_DIR = BASE_DIR / "output"
 WORK_DIR = OUTPUT_DIR / "work"          # per-video scratch (images, audio, segments)
 READY_DIR = OUTPUT_DIR / "ready"        # finished videos / shorts / thumbnails / captions
 STATE_FILE = DATA_DIR / "state.json"
+GENERATED_TOPICS_FILE = DATA_DIR / "generated_topics.json"
+STORY_COOLDOWN_DAYS = int(os.getenv("STORY_COOLDOWN_DAYS", "36500"))  # 36500 = a story is NEVER produced twice (lower it, e.g. 180, to allow re-tells)
 TOPICS_FILE = DATA_DIR / "topics.json"
 ARCHIVE_FILE = DATA_DIR / "true_history_archive.json"
 
@@ -28,7 +30,8 @@ for _d in (DATA_DIR, OUTPUT_DIR, WORK_DIR, READY_DIR):
 
 
 def env(name: str, default: str = "") -> str:
-    return os.getenv(name, default).strip()
+    # strip whitespace plus invisible BOM / zero-width chars that sneak in when secrets are pasted or piped
+    return os.getenv(name, default).replace("﻿", "").replace("​", "").strip()
 
 
 # ---- Script writer (free Gemini API key: https://aistudio.google.com/apikey) ----

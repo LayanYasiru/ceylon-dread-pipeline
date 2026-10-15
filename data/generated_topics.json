@@ -1,0 +1,303 @@
+[
+  {
+    "title": "The Fishermen's Plea to Kadal Kanni",
+    "kind": "folklore",
+    "seed": "Fishermen along the East Coast whisper tales of Kadal Kanni, a benevolent yet demanding sea spirit said to protect their waters. They say she bestows bountiful catches to those who offer her tribute, but those who fail to honour her often find themselves lost at sea, their nets empty, or worse, their boats capsized by an unseen force.",
+    "setting": "A small, worn fishing boat tossed violently in a stormy sea at midnight, phosphorescent waves crashing, a lone fisherman desperately trying to steer, with the shadowy outline of an ancient lighthouse in the distance.",
+    "id": "the_fishermen_s_plea_to_kadal_kanni"
+  },
+  {
+    "title": "The Burgher Bride's Lament",
+    "kind": "legend_with_history",
+    "seed": "In an old Burgher mansion in Dehiwala, a persistent melancholic waltz tune plays from an empty ballroom, alongside the faint scent of jasmine. The story goes that a young bride, heartbroken after her fiancé never returned from the war, still searches for him, her ghostly presence tied to the house where she awaited his return.",
+    "setting": "An abandoned colonial-era Burgher mansion's ballroom, dusty and draped in cobwebs, moonlight streaming through broken windows, an antique gramophone sits on a table, emitting a faint, ethereal glow.",
+    "id": "the_burgher_bride_s_lament"
+  },
+  {
+    "title": "The Veddah Hunter's Unseen Quarry",
+    "kind": "folklore",
+    "seed": "Deep within the remote jungles of Mahiyanganaya, Veddah elders warn young hunters about an elusive beast that leaves no tracks and makes no sound. It's not the animal you see that's dangerous, they say, but the one you only feel watching you from the thickets, a presence that drains your will and leads you deeper into the jungle until you're lost forever.",
+    "setting": "A dense, primeval jungle at dusk, shafts of dim light filtering through thick canopy, a lone Veddah hunter with a bow, looking nervously into the shadows, a sense of unseen eyes watching him from the foliage.",
+    "id": "the_veddah_hunter_s_unseen_quarry"
+  },
+  {
+    "title": "The Phantom Bell of the Mannar Lighthouse",
+    "kind": "urban_legend",
+    "seed": "Fishermen around Mannar whisper of a phantom bell that rings from the old lighthouse, even when the mechanism is broken or the weather is calm. They say it tolls for ships lost long ago during the civil war or signals an impending disaster for those who hear it, a chilling sound carried across the dark waters.",
+    "setting": "A rugged coastline near the Mannar Lighthouse at the peak of a storm, waves crashing furiously against the base, a single, eerie bell ringing from the deserted structure, lightning briefly illuminating the scene.",
+    "id": "the_phantom_bell_of_the_mannar_lighthouse"
+  },
+  {
+    "title": "The Doctor's Midnight Rounds at Angoda",
+    "kind": "urban_legend",
+    "seed": "Staff and former patients at Angoda National Institute of Mental Health sometimes speak of 'The Doctor's Midnight Rounds.' They claim that on quiet nights, the shuffling footsteps and the jingle of keys belonging to a long-dead superintendent can still be heard, patrolling the empty wards, sometimes even pausing outside patient rooms, chilling those who encounter the presence.",
+    "setting": "A long, dimly lit hospital corridor at night, fluorescent lights flickering, a lone figure in old-fashioned doctor's attire visible at the far end, his silhouette casting an unnerving shadow as he slowly walks.",
+    "id": "the_doctor_s_midnight_rounds_at_angoda"
+  },
+  {
+    "title": "The Palmyra Tree's Shadow",
+    "kind": "folklore",
+    "seed": "In the dry zones of the North, elderly Tamils warn against resting under the shadow of a lone, ancient palmyra tree after dusk. They say these trees, especially those standing solitary in the middle of nowhere, are often chosen by powerful, lonely spirits called 'Pey' or 'Pishacham' that delight in preying on weary travelers, luring them deeper into the darkness.",
+    "setting": "A desolate, moonlit landscape in the Northern Province, a single, towering palmyra tree stands stark against the sky, its shadow stretching long and distorted across barren ground, creating an eerie, inviting darkness.",
+    "id": "the_palmyra_tree_s_shadow"
+  },
+  {
+    "title": "The Planter's Mirror",
+    "kind": "legend_with_history",
+    "seed": "In a decrepit planter's bungalow high in the Maskeliya hills, there's an antique mirror that plantation workers refuse to look into. They say the mirror, once owned by a tyrannical British planter, sometimes reflects not your own image, but fleeting glimpses of the estate's brutal past – a servant being whipped, a child crying, or the planter's own maniacal face peering back.",
+    "setting": "A dusty, ornate antique mirror in a dark, empty room of an old colonial tea planter's bungalow in the hill country. Moonlight weakly illuminates the room, and faint, distorted images shimmer on the mirror's surface.",
+    "id": "the_planter_s_mirror"
+  },
+  {
+    "title": "The Serpent Mound of Thanthirimale",
+    "kind": "folklore",
+    "seed": "Near the ancient site of Thanthirimale, locals speak of a massive, earthen mound shaped like a coiled cobra, said to be a guardian of a hidden treasure or a resting place for an ancient Naga king. Disturbed by the ill-intentioned, it's rumored to stir, causing tremors or releasing venomous snakes, protecting what lies beneath with an unseen, ancient power.",
+    "setting": "An ancient, overgrown earthen mound shaped like a colossal coiled cobra, silhouetted against a twilight sky near Thanthirimale, with sparse, gnarled trees and a sense of dormant power emanating from it.",
+    "id": "the_serpent_mound_of_thanthirimale"
+  },
+  {
+    "title": "The Voices from the Coconut Lagoon",
+    "kind": "folklore",
+    "seed": "Along the quiet lagoons of Puttalam, fishermen tell of nights when the wind carries strange, disembodied voices from the coconut groves bordering the water. It's said these are the wails of those who drowned in the lagoon, calling out to the living, and anyone who ventures too close to investigate might find themselves dragged beneath the dark waters.",
+    "setting": "A serene, moonlit coconut lagoon in Puttalam, water eerily still, mist hovering above the surface, with the silhouettes of swaying palm trees. Faint, mournful, and indistinguishable voices seem to drift from the dark groves.",
+    "id": "the_voices_from_the_coconut_lagoon"
+  },
+  {
+    "title": "The Old Railway Sleeper",
+    "kind": "urban_legend",
+    "seed": "Along the old railway line between Polgahawela and Rambukkana, engineers speak of a particular railway sleeper, perpetually damp and overgrown, that hums with a faint, sorrowful energy. Legend says it marks the spot of a tragic accident where a child vanished, and those who stand too close on a quiet night can hear faint cries emanating from the ground beneath it, as if trapped.",
+    "setting": "A desolate stretch of overgrown railway tracks at dusk, with a single, unusually dark and damp railway sleeper in the foreground. The air is heavy and still, with a faint, almost imperceptible tremor in the ground.",
+    "id": "the_old_railway_sleeper"
+  },
+  {
+    "title": "The Curse of the Pearl Divers",
+    "kind": "folklore",
+    "seed": "Along the coast of Mannar and Kalpitiya, generations of pearl divers have passed down tales of a powerful sea curse. It's said to target those who take too much from the ocean without showing respect, or who desecrate sacred underwater sites, leading to mysterious disappearances, monstrous encounters beneath the waves, or sudden, inexplicable illnesses on land.",
+    "setting": "A traditional Sri Lankan pearl diving boat at sea under a turbulent, moonlit sky. Divers struggle in the water, a dark, menacing shape looms beneath the surface, and a sense of dread permeates the scene.",
+    "id": "the_curse_of_the_pearl_divers"
+  },
+  {
+    "title": "The Silent Procession of the Eastern Coast",
+    "kind": "folklore",
+    "seed": "In remote coastal villages of Batticaloa, elders tell of moonless nights when a silent procession of figures in ancient garb can be seen walking towards the sea, carrying unlit torches. They are believed to be the spirits of ancestors performing a forgotten ritual, and anyone who observes them too closely or attempts to join the procession will find themselves forever bound to the spectral parade.",
+    "setting": "A deserted, dark beach on the Eastern coast, with the silhouettes of ancient figures in a silent procession moving towards the crashing waves, holding unlit torches. The moon is hidden behind heavy clouds.",
+    "id": "the_silent_procession_of_the_eastern_coast"
+  },
+  {
+    "title": "The Echoing Cries of Diyaluma Falls",
+    "kind": "urban_legend",
+    "seed": "Hikers and villagers near Diyaluma Falls claim to hear faint, mournful cries carried on the wind, especially during dusk or dawn. The legend speaks of a young couple whose tragic love story ended at the falls, and the desperate cries are said to be the girl's final moments echoing through time, warning others of a looming despair near the beautiful, yet deadly, cascade.",
+    "setting": "The majestic Diyaluma Falls at dusk, shrouded in a thin mist. The water plunges into a dark pool below, and a sense of melancholy hangs in the air, with faint, almost human-like wails carried by the wind.",
+    "id": "the_echoing_cries_of_diyaluma_falls"
+  },
+  {
+    "title": "The Aluthamankada Market's Midnight Buyer",
+    "kind": "urban_legend",
+    "seed": "At the busy Aluthamankada market in Colombo, vendors sometimes speak of a mysterious buyer who appears only after midnight. He offers unusually high prices for common goods but pays in ancient, unidentifiable coins. Those who accept his payment often find their fortunes inexplicably turning for the worse, as if the wealth comes with a hidden, heavy price.",
+    "setting": "A deserted Aluthamankada market street in Colombo at midnight, streetlights casting long shadows. A single vendor stands by his stall, looking wary, while a cloaked, shadowy figure with a hat stands before him, extending an ancient-looking coin.",
+    "id": "the_aluthamankada_market_s_midnight_buyer"
+  },
+  {
+    "title": "The River Guardian of Mahaweli",
+    "kind": "folklore",
+    "seed": "Along the powerful currents of the Mahaweli River, particularly near ancient crossings, legends tell of a fierce river guardian spirit. It's said to appear as a swirling vortex or a shadowy figure to those who pollute its waters or attempt to cross during forbidden times, dragging them down to the depths to become part of its silent, watery domain.",
+    "setting": "The wide, dark expanse of the Mahaweli River at night, a swirling, ominous vortex forming in the middle, reflecting the dim moonlight. The surrounding riverbanks are thick with ancient trees, and an unsettling stillness hangs in the air.",
+    "id": "the_river_guardian_of_mahaweli"
+  },
+  {
+    "title": "The Haunted Lighthouse of Barberyn",
+    "kind": "urban_legend",
+    "seed": "The lightkeepers and fishermen near Barberyn Island Lighthouse have long told tales of the old British lightkeeper who still haunts its winding stairs. They say he paces the top floor, his footsteps echoing, forever searching for a ship that never arrived, or perhaps trying to relight the lamp that failed him during a terrible storm.",
+    "setting": "The Barberyn Lighthouse on a small, rocky island, silhouetted against a stormy, moonlit sky. A single window near the top glows eerily, and a faint, spectral figure can be seen pacing within.",
+    "id": "the_haunted_lighthouse_of_barberyn"
+  },
+  {
+    "title": "The Cries from the Slave Island Sewers",
+    "kind": "urban_legend",
+    "seed": "In the old, crumbling underbelly of Colombo's Slave Island, municipal workers and residents near the old sewers occasionally report hearing faint, desperate cries emanating from below ground. It's believed these are the trapped souls of the slaves brought by the Dutch, their suffering forever imprinted on the very foundations of the city, especially audible on quiet, humid nights.",
+    "setting": "A dark, grimy entrance to an old sewer system in a forgotten alleyway of Slave Island, Colombo, at night. Water drips audibly, and faint, distant wails seem to echo from the depths below.",
+    "id": "the_cries_from_the_slave_island_sewers"
+  },
+  {
+    "title": "The Drumming of the Veddah Ancestors",
+    "kind": "folklore",
+    "seed": "Deep in the ancestral lands near Dambana, the Veddah people speak of hearing ancient, rhythmic drumming from the dense forest on specific nights, even when no one is present. These are believed to be the drums of their ancestors, calling across time, and to hear them too often or too clearly is said to be a sign that you are being called to the spirit world.",
+    "setting": "A clearing in a dense, ancient forest near Dambana at night, illuminated by a faint, eerie moonlight. A sense of profound ancientness permeates the air, and distant, rhythmic drumming echoes from unseen depths of the jungle.",
+    "id": "the_drumming_of_the_veddah_ancestors"
+  },
+  {
+    "title": "The Phantom Bullock Cart of Habarana",
+    "kind": "urban_legend",
+    "seed": "Along the isolated jungle roads near Habarana, lorry drivers and late-night travelers occasionally report encountering a phantom bullock cart, moving silently without a driver or bullocks. It appears out of nowhere, its ancient wooden wheels creaking hauntingly, only to vanish into the dense foliage, often leading those who follow it astray into the heart of the jungle.",
+    "setting": "A dark, isolated jungle road near Habarana, shrouded in mist at midnight. A ghostly, translucent bullock cart, without driver or animals, slowly trundles down the road, its wooden wheels making faint, creaking sounds.",
+    "id": "the_phantom_bullock_cart_of_habarana"
+  },
+  {
+    "title": "The Broken Statues of Polonnaruwa",
+    "kind": "folklore",
+    "seed": "Among the ruins of Polonnaruwa, legends speak of certain broken or defaced ancient statues that are said to house restless spirits or carry a lingering curse. It's believed that anyone who attempts to disturb these particular relics, or even takes a fragment, will invite misfortune, nightmares, or even physical harm, as the spirits resent their desecrated forms.",
+    "setting": "The ancient ruins of Polonnaruwa at dusk, specifically focusing on a broken, partially overgrown statue of a deity or king. The air is still, heavy with history, and an ominous glow emanates from the cracks of the statue.",
+    "id": "the_broken_statues_of_polonnaruwa"
+  },
+  {
+    "title": "The Unseen Doctor of the Old Jaffna Hospital",
+    "kind": "legend_with_history",
+    "seed": "Nurses and staff at the old section of the Jaffna Teaching Hospital have long reported cold spots, disembodied whispers, and the faint smell of antiseptic in empty wards, attributing it to an old colonial doctor. It's said his spirit still conducts rounds, especially in the surgical wards, eternally trying to save patients from a devastating plague from a bygone era.",
+    "setting": "A long, decaying corridor in an old hospital wing in Jaffna, lit only by dim, flickering emergency lights. The air is cold, and the faint scent of old antiseptic hangs heavy, with the shadowy outline of a figure disappearing around a corner.",
+    "id": "the_unseen_doctor_of_the_old_jaffna_hospital"
+  },
+  {
+    "title": "The Lake's Secret in Batticaloa",
+    "kind": "folklore",
+    "seed": "Locals around Batticaloa Lagoon whisper about a peculiar phenomenon beneath its calm surface – a deep, resonant hum or a strange, bioluminescent glow that appears on certain nights. Some believe it's a colossal, ancient creature slumbering in the depths, while others say it's a portal to another realm, and those who venture too close during these occurrences are never seen again.",
+    "setting": "The wide, dark expanse of Batticaloa Lagoon at night, under a starless sky. The surface of the water glows with an eerie, shifting bioluminescence, and a low, guttural hum seems to emanate from beneath the surface.",
+    "id": "the_lake_s_secret_in_batticaloa"
+  },
+  {
+    "title": "The Weaver's Loom That Weaves Fate",
+    "kind": "folklore",
+    "seed": "In a remote village in the Uva hills, there's a legend of an ancient loom that works by itself after dark. They say it weaves the tapestry of future tragedies, and anyone who glimpses it working will see their own misfortune unfold.",
+    "setting": "A dimly lit, dusty room in an old mud house, a wooden loom clattering eerily in the moonlight filtering through a small window. Cobwebs hanging, threads moving on their own.",
+    "id": "the_weaver_s_loom_that_weaves_fate"
+  },
+  {
+    "title": "The Silent Crow of Sigiriya's Summit",
+    "kind": "folklore",
+    "seed": "Locals whisper of a lone, silent crow that appears only on misty mornings at the summit of Sigiriya. It's said to be the reincarnation of a wronged queen, and its silent presence foretells a fall from grace for those who witness it.",
+    "setting": "The misty, ruined summit of Sigiriya Rock Fortress at dawn, a single, large black crow perched motionless on a crumbling stone, its eyes fixed on the viewer.",
+    "id": "the_silent_crow_of_sigiriya_s_summit"
+  },
+  {
+    "title": "The Salt Pan Ghosts of Puttalam",
+    "kind": "urban_legend",
+    "seed": "Workers at the vast salt pans of Puttalam tell chilling tales of figures shimmering in the heat haze, spectral laborers who continue to toil under the scorching sun long after their earthly bodies have succumbed to the harsh conditions. They say if you hear their whispers, you'll be drawn into the endless work.",
+    "setting": "Vast, shimmering white salt pans under a harsh midday sun, heat haze distorting the horizon, faint, translucent figures appearing to work in the distance.",
+    "id": "the_salt_pan_ghosts_of_puttalam"
+  },
+  {
+    "title": "The Whispering Banyan of Mannar Causeway",
+    "kind": "legend_with_history",
+    "seed": "Travelers crossing the Mannar Causeway speak of an ancient Banyan tree, said to be a sentinel since colonial times. Its leaves whisper forgotten secrets of shipwrecks and lost travelers, and some claim the wind carries the pleas of those who perished trying to cross.",
+    "setting": "A massive, ancient banyan tree with countless aerial roots, looming beside a narrow, desolate causeway over calm, dark waters under a starless night sky.",
+    "id": "the_whispering_banyan_of_mannar_causeway"
+  },
+  {
+    "title": "The Midnight Plucker of Hatton Estates",
+    "kind": "urban_legend",
+    "seed": "Tea pluckers on the Hatton estates pass down stories of a figure seen moving through the tea bushes after midnight, a phantom plucker who works tirelessly. It's said to be the spirit of a worker who died from exhaustion, still compelled to harvest, and if you follow its movements, you'll find an impossible harvest.",
+    "setting": "Dense tea plantations shrouded in mist under a half-moon, faint rustling sounds, a shadowy figure moving silently between rows of tea bushes.",
+    "id": "the_midnight_plucker_of_hatton_estates"
+  },
+  {
+    "title": "The Crooked Bridge of Ampara",
+    "kind": "folklore",
+    "seed": "Villagers in Ampara avoid a particular old, crooked wooden bridge after dark. They say it was built over a forgotten burial ground, and the spirits beneath resent its presence, causing travelers to lose their way or hear unsettling moans rising from the water below.",
+    "setting": "A rickety, ancient wooden bridge curving over a dark, sluggish river in a dense jungle, tangled vines hanging, under a moonless sky.",
+    "id": "the_crooked_bridge_of_ampara"
+  },
+  {
+    "title": "The Veddah's Shadow in the Forest's Edge",
+    "kind": "folklore",
+    "seed": "Deep in the forests bordering the Eastern Province, Veddah elders warn against a particular shadow that detaches from the trees at twilight. It's not a spirit, but a manifestation of the forest's anger at intruders, capable of luring the unwary deep into its depths, never to be seen again.",
+    "setting": "The dense, dark edge of a primeval forest at dusk, long, distorted shadows stretching from the trees, a single, deeper shadow detaching and moving silently.",
+    "id": "the_veddah_s_shadow_in_the_forest_s_edge"
+  },
+  {
+    "title": "The Abandoned Graphite Mine of Kahatagaha",
+    "kind": "urban_legend",
+    "seed": "The old abandoned graphite mines in Kahatagaha are rumored to be haunted by the spirits of miners trapped deep underground. Visitors tell of phantom picks hitting rock, disembodied coughs, and the oppressive feeling of being watched by unseen eyes in the eternal darkness.",
+    "setting": "The dark, decaying entrance to an old mine shaft, overgrown with creepers, rust-stained machinery lying idle, a faint light source barely illuminating the oppressive darkness within.",
+    "id": "the_abandoned_graphite_mine_of_kahatagaha"
+  },
+  {
+    "title": "The Fishermen's Nets of Delving Souls",
+    "kind": "folklore",
+    "seed": "Along the Southern coast, there's a superstition among fishermen about certain nets that, when cast near old wreck sites, seem to catch not fish, but shadows and the faint echoes of drowning cries. They believe these nets draw up the 'delving souls' of those lost at sea.",
+    "setting": "A small fishing boat at sea at night, lantern light reflecting on dark, choppy waves, a fisherman pulling a net, within which dark, indistinct shapes seem to writhe.",
+    "id": "the_fishermen_s_nets_of_delving_souls"
+  },
+  {
+    "title": "The Lady in White of Diyatalawa Sanatorium",
+    "kind": "urban_legend",
+    "seed": "At the old colonial sanatorium in Diyatalawa, once a place for tuberculosis patients, staff and locals recount sightings of a spectral 'Lady in White.' She is said to roam the corridors at night, still searching for a cure or perhaps a loved one lost to the disease.",
+    "setting": "A long, dimly lit corridor in an old, decaying colonial sanatorium, peeling paint, flickering fluorescent lights, a tall, slender figure in a white gown at the far end.",
+    "id": "the_lady_in_white_of_diyatalawa_sanatorium"
+  },
+  {
+    "title": "The Well of Whispers in Jaffna's Ruins",
+    "kind": "folklore",
+    "seed": "In the war-torn ruins of an old Jaffna family compound, there's a well from which, on humid nights, faint whispers are said to emanate. Locals believe it's the voices of those who sought refuge in its depths, their last words echoing from the water.",
+    "setting": "A crumbling, moss-covered stone well in the courtyard of a ruined house, surrounded by shattered walls and overgrown weeds, moonlight reflecting on dark, still water.",
+    "id": "the_well_of_whispers_in_jaffna_s_ruins"
+  },
+  {
+    "title": "The Night Bus to Badulla, and Its Extra Passenger",
+    "kind": "urban_legend",
+    "seed": "Drivers on the long, winding road to Badulla often share tales of a silent, uninvited passenger who appears on the last night bus. This figure, often described as disheveled and sorrowful, is said to bring ill fortune to anyone who acknowledges its presence.",
+    "setting": "The interior of a dimly lit, near-empty bus rattling along a dark, winding mountain road at night, rain streaking the windows, a solitary, indistinct figure sitting at the very back.",
+    "id": "the_night_bus_to_badulla_and_its_extra_passenger"
+  },
+  {
+    "title": "The Echoes of the Slave Bell at Negombo",
+    "kind": "history",
+    "seed": "In Negombo, near the old Dutch Fort, there are whispers of a 'slave bell' that was once rung to gather forced laborers. On certain nights, a faint, melancholic chime is heard, believed to be the echo of that bell, carrying the sorrow of generations.",
+    "setting": "Dark, weathered brick walls of an old colonial fort, overgrown with vines, a desolate bell tower silhouetted against a cloudy night sky, faint, mournful bell sound.",
+    "id": "the_echoes_of_the_slave_bell_at_negombo"
+  },
+  {
+    "title": "The Shipwreck's Watchman of Trincomalee",
+    "kind": "legend_with_history",
+    "seed": "Divers and local fishermen around Trincomalee's numerous shipwrecks tell of an unseen entity that guards the sunken vessels. Some say it's the spirit of a captain who refused to abandon his ship, protecting his treasure, and those who attempt to salvage from his wreck face sudden, unexplained misfortunes.",
+    "setting": "Dark, murky ocean depths, the skeletal remains of an ancient shipwreck on the seabed, shadowy figures of fish darting, a faint, glowing form barely discernible in the distance.",
+    "id": "the_shipwreck_s_watchman_of_trincomalee"
+  },
+  {
+    "title": "The Dhobi Ghost of Colombo's Laundries",
+    "kind": "urban_legend",
+    "seed": "In the old, communal laundries of Colombo, dhobis (laundry workers) speak of a phantom washerwoman who appears late at night. She diligently cleans clothes with ethereal movements, believed to be a spirit still tied to her lifelong toil, and her presence is said to bring a chill that no fire can dispel.",
+    "setting": "A large, steamy, dimly lit communal laundry room at night, clothes hanging to dry, tubs filled with water, a translucent figure rhythmically scrubbing clothes at a stone basin.",
+    "id": "the_dhobi_ghost_of_colombo_s_laundries"
+  },
+  {
+    "title": "The Whispering Walls of Old Parliament",
+    "kind": "legend_with_history",
+    "seed": "Security guards and late-night workers in Colombo's Old Parliament Building sometimes report hearing faint whispers and hushed arguments echoing through empty halls. They say it's the spectral remnants of past debates and long-dead politicians, forever bound to their legislative duties.",
+    "setting": "A grand, empty hall in an old colonial-era parliament building, moonlight streaming through tall windows, casting long shadows, faint, indistinct voices seeming to emanate from the very walls.",
+    "id": "the_whispering_walls_of_old_parliament"
+  },
+  {
+    "title": "The Elephant Graveyard's Curse",
+    "kind": "folklore",
+    "seed": "Deep within the jungles of the North Central Province, ancient folklore speaks of a hidden elephant graveyard, a sacred place. Trespassers are warned of a powerful curse, as the spirits of the deceased elephants rise to protect their resting place, leading the intruders astray until they vanish without a trace.",
+    "setting": "A clearing in a dense, ancient jungle at night, littered with enormous, bleached elephant bones and tusks, dense mist swirling, an eerie silence broken by the faint trumpeting of an unseen herd.",
+    "id": "the_elephant_graveyard_s_curse"
+  },
+  {
+    "title": "The Midnight Harvest of the Coconut Trees",
+    "kind": "folklore",
+    "seed": "Along the coastal villages of the North Western Province, older folk warn against certain coconut trees that are said to be harvested by unseen hands at midnight. The thud of coconuts falling when no one is around signals a visit from a 'tree yaka' (demon), who claims any fallen fruit as its own.",
+    "setting": "A cluster of tall coconut trees silhouetted against a full moon, their fronds swaying unnaturally, the distinct thud of a falling coconut breaking the silence of the night, no human figures visible.",
+    "id": "the_midnight_harvest_of_the_coconut_trees"
+  },
+  {
+    "title": "The Shadow Puppets of Katharagama",
+    "kind": "folklore",
+    "seed": "Near the sacred town of Katharagama, traveling storytellers share tales of shadow puppets that animate themselves in abandoned shelters after dark. They perform forgotten stories of devotion and despair, and watching them is said to bind one's fate to the puppet's tragic end.",
+    "setting": "A desolate, ramshackle shelter in a dusty, remote area near a sacred town, a flickering lantern casting exaggerated shadows, intricate, ancient shadow puppets moving on their own against a makeshift screen.",
+    "id": "the_shadow_puppets_of_katharagama"
+  },
+  {
+    "title": "The Ghostly Guests of Nuwara Eliya's Grand Hotels",
+    "kind": "urban_legend",
+    "seed": "The opulent, old grand hotels of Nuwara Eliya are rife with stories of spectral guests from the colonial era. Guests report sudden drops in temperature, disembodied conversations, and glimpses of finely dressed figures wandering the hallways, still enjoying their mountain retreat.",
+    "setting": "A grand, dimly lit hotel corridor in a colonial-era building, ornate wallpaper, antique furniture, a faint, translucent figure in period attire walking silently away.",
+    "id": "the_ghostly_guests_of_nuwara_eliya_s_grand_hotel"
+  },
+  {
+    "title": "The Last Weaver of Jaffna's Kaithady",
+    "kind": "legend_with_history",
+    "seed": "In Kaithady, Jaffna, an old weaving village, there's a poignant tale of a master weaver whose spirit still haunts her abandoned workshop. She's said to weave a shroud for those destined to die soon, and the rhythmic sound of her loom can be heard from the empty building at night.",
+    "setting": "An old, dilapidated weaving workshop in a remote village, moonbeams filtering through gaps in the roof, illuminating a lone, ancient loom, threads moving on their own, a faint, rhythmic clacking sound.",
+    "id": "the_last_weaver_of_jaffna_s_kaithady"
+  }
+]
