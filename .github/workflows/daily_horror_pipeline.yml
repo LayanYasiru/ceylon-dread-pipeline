@@ -6,6 +6,10 @@ on:
     # which leaves you a review window to delete anything you dislike.
     - cron: '30 20 * * *'
   workflow_dispatch:
+    inputs:
+      count:
+        description: 'How many episodes to make (use 1 for a test)'
+        default: '2'
 
 permissions:
   contents: write   # to commit data/state.json (which stories are already done)
@@ -53,7 +57,7 @@ jobs:
           TIKTOK_ACCESS_TOKEN: ${{ secrets.TIKTOK_ACCESS_TOKEN }}
           PUBLISH_MODE: ${{ vars.PUBLISH_MODE || 'scheduled' }}
           CHANNEL_NAME: ${{ vars.CHANNEL_NAME || 'Ceylon Dread' }}
-        run: python run_daily.py
+        run: python run_daily.py --count ${{ github.event.inputs.count || '2' }}
 
       - name: Commit progress (state + script history)
         if: always()
@@ -69,6 +73,7 @@ jobs:
         with:
           name: shorts-and-thumbnails
           path: |
+            output/ready/**/*_long.mp4
             output/ready/**/*short*.mp4
             output/ready/**/*_thumb.jpg
             output/ready/**/metadata.json

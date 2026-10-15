@@ -37,6 +37,18 @@ def publish_episode(meta: dict, slot, shorts_offsets_h=(2, 5)) -> dict:
     return res
 
 
+def _flatten(node):
+    if isinstance(node, dict):
+        if "status" in node:
+            yield node
+        else:
+            for v in node.values():
+                yield from _flatten(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _flatten(v)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--count", type=int, default=config.VIDEOS_PER_RUN)
@@ -61,8 +73,11 @@ def main() -> int:
                 script = load_script_file(args.script_file) if args.script_file else write_script(story)
                 meta = produce_episode(story, script, slot.isoformat())["meta"]
             result = {} if args.no_publish else publish_episode(meta, slot)
-            if not args.no_publish:   # a dry run must not use up the story
+            uploaded = any(v.get("status") == "ok" for v in _flatten(result))
+            if not args.no_publish and uploaded:   # dry runs / total upload failure must not use up the story
                 story_bank.mark_done(sid, {"title": meta["title"], "publish": result})
+            elif not args.no_publish:
+                print(f"[WARN] {sid}: nothing was uploaded (no platform tokens yet?) - story NOT marked as used.")
             if not args.keep_work:
                 shutil.rmtree(config.WORK_DIR / sid, ignore_errors=True)
             ok += 1
