@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+
+# Generated media
+output/
+
+# Secrets (DO NOT COMMIT)
+client_secret.json
+token.json
+.env
+legacy/
+
+venv/
+env/
+logs/
