@@ -29,7 +29,11 @@ def _fit(data: bytes, size: tuple[int, int]) -> Image.Image:
     scale = max(tw / im.width, th / im.height)
     im = im.resize((int(im.width * scale) + 1, int(im.height * scale) + 1), Image.LANCZOS)
     left, top = (im.width - tw) // 2, (im.height - th) // 2
-    return im.crop((left, top, left + tw, top + th))
+    im = im.crop((left, top, left + tw, top + th))
+    if scale > 1.3:   # strong upscale (e.g. square 1024px model output -> 16:9 or 9:16): restore some crispness
+        from PIL import ImageFilter
+        im = im.filter(ImageFilter.UnsharpMask(radius=2.2, percent=90, threshold=2))
+    return im
 
 
 def _pollinations(prompt, size, seed):
@@ -47,7 +51,7 @@ def _cloudflare(prompt, size, seed):
         raise RuntimeError("Cloudflare credentials not set")
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell"
     r = requests.post(url, headers={"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}"},
-                      json={"prompt": prompt[:2000], "steps": 6, "seed": seed}, timeout=120)
+                      json={"prompt": prompt[:2000], "steps": 6}, timeout=180)   # API rejects seed/width/height; output is 1024x1024
     r.raise_for_status()
     return base64.b64decode(r.json()["result"]["image"])
 
