@@ -15,8 +15,12 @@ FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 SAMPLE_RATE = 44100
 
 
-async def _synth(text: str, out_mp3: Path) -> list[tuple[float, float, str]]:
-    comm = edge_tts.Communicate(text, VOICE_EN, rate=VOICE_RATE, pitch=VOICE_PITCH, boundary="WordBoundary")
+def _num(s: str) -> int:
+    return int(re.sub(r"[^\d+-]", "", s) or 0)
+
+
+async def _synth(text: str, out_mp3: Path, rate: str | None = None, pitch: str | None = None) -> list[tuple[float, float, str]]:
+    comm = edge_tts.Communicate(text, VOICE_EN, rate=rate or VOICE_RATE, pitch=pitch or VOICE_PITCH, boundary="WordBoundary")
     events = []
     with open(out_mp3, "wb") as f:
         async for ch in comm.stream():
@@ -28,11 +32,11 @@ async def _synth(text: str, out_mp3: Path) -> list[tuple[float, float, str]]:
     return events
 
 
-def synth_scene(text: str, out_mp3: Path, retries: int = 3) -> list[tuple[float, float, str]]:
+def synth_scene(text: str, out_mp3: Path, retries: int = 3, rate: str | None = None, pitch: str | None = None) -> list[tuple[float, float, str]]:
     last = None
     for i in range(1, retries + 1):
         try:
-            ev = asyncio.run(_synth(text, out_mp3))
+            ev = asyncio.run(_synth(text, out_mp3, rate, pitch))
             if out_mp3.stat().st_size > 2000:
                 return ev
         except Exception as e:
@@ -62,17 +66,56 @@ def concat_wavs(wavs: list[Path], out: Path) -> None:
                 wo.writeframes(wi.readframes(wi.getnframes()))
 
 
+def _sentences(text: str) -> list[str]:
+    parts = re.split(r"(?<=[.!?…])\s+", text.strip())
+    return [p for p in parts if p.strip()]
+
+
+def _pause_after(sentence: str, last: bool, rng) -> float:
+    """Human storytellers do not leave identical gaps: longer after questions and trailing-off lines, shorter after short beats."""
+    s = sentence.strip()
+    if last:
+        return rng.uniform(0.75, 1.0)
+    if s.endswith("…") or s.endswith("..."):
+        return rng.uniform(0.85, 1.2)
+    if s.endswith("?"):
+        return rng.uniform(0.55, 0.8)
+    if len(s.split()) <= 4:
+        return rng.uniform(0.3, 0.45)
+    return rng.uniform(0.32, 0.55)
+
+
+def _natural_block(text: str, workdir: Path, label: str, i: int, rng) -> tuple[Path, float, list]:
+    """One scene -> sentence-by-sentence synthesis with small random rate/pitch variation and human-like pauses."""
+    base_rate, base_pitch = _num(VOICE_RATE), _num(VOICE_PITCH)
+    wavs, events, t = [], [], 0.0
+    sents = _sentences(text)
+    for k, sent in enumerate(sents):
+        words = len(sent.split())
+        rate = base_rate + rng.uniform(-3.5, 2.5) - (4 if words <= 5 else 0)       # short dramatic lines slower
+        pitch = base_pitch + rng.uniform(-2.0, 2.0) + (2 if sent.endswith("?") else 0) - (2 if words <= 5 else 0)
+        mp3 = workdir / f"{label}_{i:02d}_{k:02d}.mp3"
+        wav = workdir / f"{label}_{i:02d}_{k:02d}.wav"
+        ev = synth_scene(sent, mp3, rate=f"{rate:+.0f}%", pitch=f"{pitch:+.0f}Hz")
+        dur = _to_wav(mp3, wav, _pause_after(sent, k == len(sents) - 1, rng))
+        events += [(t + s, t + e, w) for s, e, w in ev]
+        wavs.append(wav)
+        t += dur
+    block = workdir / f"{label}_{i:02d}.wav"
+    concat_wavs(wavs, block)
+    return block, t, events
+
+
 def narrate(texts: list[str], workdir: Path, label: str, gap: float = 0.55) -> dict:
     """Synthesize each text block. Returns {wav, durations, starts, events(abs timings), total}."""
+    import random
     workdir.mkdir(parents=True, exist_ok=True)
+    rng = random.Random(label + str(len(texts)))
     wavs, durations, starts, all_events = [], [], [], []
     t0 = 0.0
     for i, text in enumerate(texts, 1):
-        mp3 = workdir / f"{label}_{i:02d}.mp3"
-        wav = workdir / f"{label}_{i:02d}.wav"
         print(f"  [Voice] {label} block {i}/{len(texts)} ({len(text.split())} words)")
-        ev = synth_scene(text, mp3)
-        dur = _to_wav(mp3, wav, gap)
+        wav, dur, ev = _natural_block(text, workdir, label, i, rng)
         starts.append(t0)
         durations.append(dur)
         all_events += [(t0 + s, t0 + e, w) for s, e, w in ev]
