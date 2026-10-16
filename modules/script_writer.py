@@ -46,7 +46,8 @@ SEED NOTES: {story['seed']}
 VISUAL SETTING: {story['setting']}
 
 Requirements:
-- Narration total ≈ {TARGET_WORDS} words across 10-12 scenes (about {TARGET_WORDS // 140} minutes spoken).
+- Narration total ≈ {TARGET_WORDS} words across 11 scenes (about {TARGET_WORDS // 140} minutes spoken). EVERY scene must be 100-140 words;
+  a draft under {int(TARGET_WORDS * 0.85)} words will be rejected.
 - Exactly {SHORTS_PER_VIDEO} shorts.
 - Follow this JSON schema exactly:
 {SCHEMA}
@@ -56,12 +57,26 @@ Requirements:
     return p
 
 
-def write_script(story: dict, max_attempts: int = 3) -> dict:
+def _expand_prompt(script: dict, problems: list[str]) -> str:
+    """The model's usual failure is a draft that is too SHORT. Ask it to deepen that draft instead of starting over."""
+    n = len(quality.full_text(script).split())
+    return (f"Here is your draft episode as JSON ({n} words of narration). It is good but too short / has these problems:\n- "
+            + "\n- ".join(problems)
+            + f"\n\nRewrite the SAME story and keep the same structure, but expand it to about {TARGET_WORDS} words of narration: "
+              "every scene must be 100-140 words with more sensory detail, dialogue, and slower build-up of dread (do not add new plot or "
+              "change the ending). Keep the shorts at 100-130 words each. Return the full JSON again in the same schema.\n\nDRAFT:\n"
+            + json.dumps(script, ensure_ascii=False))
+
+
+def write_script(story: dict, max_attempts: int = 5) -> dict:
     feedback = None
     best = None
     for attempt in range(1, max_attempts + 1):
         print(f"[Script] Writing '{story['title']}' (attempt {attempt}/{max_attempts})...")
-        script = llm.generate_json(_build_prompt(story, feedback), system=SYSTEM)
+        if best is not None and feedback:
+            script = llm.generate_json(_expand_prompt(best, feedback), system=SYSTEM)   # refine the draft
+        else:
+            script = llm.generate_json(_build_prompt(story, feedback), system=SYSTEM)
         problems = quality.check_script(script, story["id"])
         if not problems:
             print("[Script] Passed quality gate.")
@@ -69,7 +84,8 @@ def write_script(story: dict, max_attempts: int = 3) -> dict:
             return script
         print("[Script] Problems:\n  - " + "\n  - ".join(problems))
         feedback = problems
-        best = script
+        if script.get("scenes"):
+            best = script
     raise RuntimeError(
         f"Script for '{story['id']}' failed the quality gate after {max_attempts} attempts; refusing to publish a weak video. "
         f"Last problems: {feedback}"
