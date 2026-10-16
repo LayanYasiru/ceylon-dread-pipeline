@@ -23,4 +23,8 @@ if __name__ == "__main__":
     out.mkdir(parents=True, exist_ok=True)
     nar = tts.narrate(TEXT, out / "work", "sample")
     mp3 = video.audio_only(nar["wav"], nar["total"], 12345, nar["starts"], out / "work", out / "sample_natural.mp3")
+    ev = nar["events"]
+    mono = all(ev[k][0] <= ev[k + 1][0] + 1e-6 for k in range(len(ev) - 1))
+    print("caption events:", len(ev), "| monotonic:", mono, "| first:", [(round(s, 2), w) for s, _, w in ev[:6]],
+          "| last end %.1fs of %.1fs" % (ev[-1][1], nar["total"]))
     print("Listen:", mp3.resolve(), f"({nar['total']:.0f}s)")

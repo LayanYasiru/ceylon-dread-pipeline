@@ -38,7 +38,11 @@ def env(name: str, default: str = "") -> str:
 GEMINI_API_KEY = env("GEMINI_API_KEY") or env("GOOGLE_API_KEY")
 GEMINI_MODEL = env("GEMINI_MODEL", "gemini-2.5-flash")
 
-# ---- Voice (Edge-TTS is free, no key) ----
+# ---- Voice: Gemini TTS (free key, expressive: whisper / slow-downs) with automatic Edge-TTS fallback ----
+TTS_PROVIDER = env("TTS_PROVIDER", "gemini")           # gemini | edge
+GEMINI_TTS_MODEL = env("GEMINI_TTS_MODEL", "gemini-3.8-flash-tts")
+GEMINI_TTS_VOICE = env("GEMINI_TTS_VOICE", "Algenib")  # gravelly, older storyteller
+# ---- Voice fallback (Edge-TTS is free, no key) ----
 VOICE_EN = env("VOICE_EN", "en-GB-RyanNeural")   # try en-IN-PrabhatNeural for a South-Asian accent
 VOICE_RATE = env("VOICE_RATE", "-8%")
 VOICE_PITCH = env("VOICE_PITCH", "-4Hz")
