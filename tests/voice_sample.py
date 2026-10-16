@@ -27,4 +27,5 @@ if __name__ == "__main__":
     mono = all(ev[k][0] <= ev[k + 1][0] + 1e-6 for k in range(len(ev) - 1))
     print("caption events:", len(ev), "| monotonic:", mono, "| first:", [(round(s, 2), w) for s, _, w in ev[:6]],
           "| last end %.1fs of %.1fs" % (ev[-1][1], nar["total"]))
+    print("scene starts:", [round(s, 1) for s in nar["starts"]], "| durations:", [round(d, 1) for d in nar["durations"]])
     print("Listen:", mp3.resolve(), f"({nar['total']:.0f}s)")

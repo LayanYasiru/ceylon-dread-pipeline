@@ -51,8 +51,9 @@ def _cloudflare(prompt, size, seed):
         raise RuntimeError("Cloudflare credentials not set")
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell"
     r = requests.post(url, headers={"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}"},
-                      json={"prompt": prompt[:2000], "steps": 6}, timeout=180)   # API rejects seed/width/height; output is 1024x1024
-    r.raise_for_status()
+                      json={"prompt": prompt[:2000], "steps": 4}, timeout=180)   # API rejects seed/width/height; output is 1024x1024
+    if r.status_code != 200:
+        raise RuntimeError(f"{r.status_code} {r.text[:240]}")
     return base64.b64decode(r.json()["result"]["image"])
 
 
@@ -103,6 +104,7 @@ def generate(prompt: str, out: Path, size: tuple[int, int], seed: int) -> bool:
             continue
         try:
             data = _PROVIDERS[name](full_prompt, size, seed)
+            out.with_suffix(".raw.jpg").write_bytes(data)            # keep the untouched original so shorts can re-crop it vertically
             _fit(data, size).save(out, "JPEG", quality=93)
             if check_image(out):
                 _fail_count[name] = 0
@@ -111,9 +113,9 @@ def generate(prompt: str, out: Path, size: tuple[int, int], seed: int) -> bool:
             raise RuntimeError("image failed sanity check (blank/tiny)")
         except Exception as e:
             _fail_count[name] = _fail_count.get(name, 0) + 1
-            msg = str(e)[:110]
+            msg = str(e)[:240]
             print(f"    [Image {name} failed ({_fail_count[name]})] {msg}")
-            if "not set" in msg or _fail_count[name] >= 3:
+            if "not set" in msg or "daily free allocation" in msg or "daily" in msg.lower() and "429" in msg or _fail_count[name] >= 3:
                 _disabled.add(name)
                 print(f"    [Image] provider '{name}' disabled for this run")
     return False
@@ -136,3 +138,16 @@ def generate_many(prompts: list[str], folder: Path, prefix: str, size: tuple[int
         last = p or last
         filled.append(last)
     return filled
+
+
+def crop_from_raw(sources: list[Path], folder: Path, prefix: str, size: tuple[int, int]) -> list[Path]:
+    """Re-crop already generated long-video images to another aspect ratio (e.g. 9:16 for Shorts) with no extra API calls."""
+    folder.mkdir(parents=True, exist_ok=True)
+    outs = []
+    for i, src in enumerate(sources):
+        raw = src.with_suffix(".raw.jpg")
+        data = (raw if raw.exists() else src).read_bytes()
+        out = folder / f"{prefix}_{i + 1:02d}.jpg"
+        _fit(data, size).save(out, "JPEG", quality=93)
+        outs.append(out)
+    return outs

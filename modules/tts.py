@@ -149,19 +149,61 @@ def _mood(label: str, i: int, n: int) -> str:
     return "The story is building: steady, intimate, a growing unease under the calm."
 
 
-def _gemini_wav(text: str, mood: str, out_wav: Path, retries: int = 4) -> None:
+class QuotaExhausted(Exception):
+    """Daily free-tier quota of a Gemini TTS model is used up."""
+
+
+def _quota_file():
+    from config import DATA_DIR
+    return DATA_DIR / "tts_quota.json"
+
+
+def _pacific_day() -> str:
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    return datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat()   # Google free-tier days reset at Pacific midnight
+
+
+def _quota_load() -> dict:
+    import json
+    try:
+        q = json.loads(_quota_file().read_text(encoding="utf-8"))
+    except Exception:
+        q = {}
+    if q.get("day") != _pacific_day():
+        q = {"day": _pacific_day(), "calls": {}}
+    return q
+
+
+def _quota_add(model: str, n: int = 1, exhausted: bool = False) -> None:
+    import json
+
+    from config import GEMINI_TTS_DAILY_LIMIT
+    q = _quota_load()
+    q["calls"][model] = GEMINI_TTS_DAILY_LIMIT if exhausted else q["calls"].get(model, 0) + n
+    _quota_file().write_text(json.dumps(q, indent=1), encoding="utf-8")
+
+
+def _pick_models(calls_needed: int) -> list[str]:
+    """Models that still have enough free calls today for this whole video, in priority order."""
+    from config import GEMINI_TTS_DAILY_LIMIT, GEMINI_TTS_MODELS
+    used = _quota_load()["calls"]
+    return [m for m in GEMINI_TTS_MODELS if used.get(m, 0) + calls_needed <= GEMINI_TTS_DAILY_LIMIT]
+
+
+def _gemini_wav(text: str, mood: str, out_wav: Path, model: str, retries: int = 3) -> None:
     import wave as _w
 
     from google import genai
     from google.genai import types
 
-    from config import GEMINI_API_KEY, GEMINI_TTS_MODEL, GEMINI_TTS_VOICE
+    from config import GEMINI_API_KEY, GEMINI_TTS_VOICE
     client = genai.Client(api_key=GEMINI_API_KEY)
     last = None
     for attempt in range(1, retries + 1):
         try:
             r = client.models.generate_content(
-                model=GEMINI_TTS_MODEL,
+                model=model,
                 contents=f"{STORY_DIRECTION} {mood}\n\nTranscript:\n{text}",
                 config=types.GenerateContentConfig(
                     response_modalities=["AUDIO"],
@@ -177,11 +219,16 @@ def _gemini_wav(text: str, mood: str, out_wav: Path, retries: int = 4) -> None:
                 w.setsampwidth(2)
                 w.setframerate(24000)
                 w.writeframes(pcm)
+            _quota_add(model)
             return
         except Exception as e:
+            msg = str(e)
+            if "429" in msg and ("PerDay" in msg or "limit: 0" in msg):
+                _quota_add(model, exhausted=True)
+                raise QuotaExhausted(model)
             last = e
-            print(f"    [Gemini TTS retry {attempt}/{retries}] {type(e).__name__}: {str(e)[:110]}")
-            time.sleep(6 * attempt)
+            print(f"    [Gemini TTS {model} retry {attempt}/{retries}] {type(e).__name__}: {msg[:110]}")
+            time.sleep(8 * attempt)
     raise RuntimeError(f"Gemini TTS failed: {last}")
 
 
@@ -190,15 +237,13 @@ def _silences(wav: Path) -> list[tuple[float, float]]:
                          stderr=subprocess.PIPE, stdout=subprocess.DEVNULL, text=True, encoding="utf-8", errors="replace")
     starts = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", res.stderr)]
     ends = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", res.stderr)]
-    out = []
-    for k, s in enumerate(starts):
-        out.append((s, ends[k] if k < len(ends) else s + 0.3))
-    return out
+    return [(s, ends[k] if k < len(ends) else s + 0.3) for k, s in enumerate(starts)]
 
 
 def _align_words(text: str, wav: Path, dur: float) -> list[tuple[float, float, str]]:
-    """Gemini TTS returns audio only. Estimate word times: distribute words by length across the spoken region, and snap sentence
-    boundaries to real pauses found by silence detection."""
+    """Gemini TTS returns audio only, so word times are estimated: words are spread by length across the spoken region and a
+    tracker snaps each sentence end to the nearest real pause (silence detection), re-estimating the speaking rate as it goes
+    so long chunks do not drift."""
     import numpy as np
     sil = _silences(wav)
     t0 = sil[0][1] if sil and sil[0][0] < 0.08 else 0.0
@@ -217,38 +262,62 @@ def _align_words(text: str, wav: Path, dur: float) -> list[tuple[float, float, s
         gaps.append(gap)
         pos += gap
     total_w = pos
-    anchors_w, anchors_t = [0.0, total_w], [t0, t_end]
+    rate = (t_end - t0) / total_w
+    cur_t, cur_w = t0, 0.0
+    anchors = [(0.0, t0)]
     used = set()
     for k, wd in enumerate(words[:-1]):
-        if re.search(r"[.?!…]$", wd) and gaps[k] > 0:
-            p_mid = wend[k] + gaps[k] / 2
-            predicted = t0 + (t_end - t0) * p_mid / total_w
-            best = None
-            for si, (a, b) in enumerate(sil):
-                mid = (a + b) / 2
-                if si not in used and abs(mid - predicted) < 1.1 and (best is None or abs(mid - predicted) < abs(best[1] - predicted)):
-                    best = (si, mid)
-            if best:
-                used.add(best[0])
-                anchors_w.append(p_mid)
-                anchors_t.append(best[1])
-    order = np.argsort(anchors_w)
-    aw, at = np.array(anchors_w)[order], np.array(anchors_t)[order]
-    at = np.maximum.accumulate(at)                                   # keep time monotonic
+        if not (re.search(r"[.?!…]$", wd) and gaps[k] > 0):
+            continue
+        p_mid = wend[k] + gaps[k] / 2
+        predicted = cur_t + rate * (p_mid - cur_w)
+        window = max(1.0, 0.25 * (predicted - cur_t))
+        best = None
+        for si, (a, b) in enumerate(sil):
+            mid = (a + b) / 2
+            if si in used or mid <= cur_t + 0.15 or abs(mid - predicted) > window:
+                continue
+            if best is None or abs(mid - predicted) < abs(best[1] - predicted):
+                best = (si, mid)
+        if best:
+            used.add(best[0])
+            anchors.append((p_mid, best[1]))
+            rate = 0.6 * rate + 0.4 * (best[1] - cur_t) / max(p_mid - cur_w, 1e-6)
+            cur_t, cur_w = best[1], p_mid
+    anchors.append((total_w, max(t_end, anchors[-1][1] + 0.05)))
+    aw = np.array([a for a, _ in anchors])
+    at = np.maximum.accumulate(np.array([b for _, b in anchors]))
     return [(float(np.interp(wstart[k], aw, at)), float(np.interp(wend[k], aw, at)), words[k]) for k in range(len(words))]
 
 
-def _narrate_gemini(texts: list[str], workdir: Path, label: str) -> dict:
+def _chunks(texts: list[str], max_words: int = 270) -> list[list[int]]:
+    """Group consecutive scenes so one TTS call covers ~2 scenes (the free tier allows few calls per day)."""
+    groups, cur, cnt = [], [], 0
+    for i, t in enumerate(texts):
+        n = len(t.split())
+        if cur and cnt + n > max_words:
+            groups.append(cur)
+            cur, cnt = [], 0
+        cur.append(i)
+        cnt += n
+    if cur:
+        groups.append(cur)
+    return groups
+
+
+def _narrate_gemini(texts: list[str], workdir: Path, label: str, model: str) -> dict:
     import random
-    rng = random.Random(label + "g")
+    rng = random.Random(label + model)
     workdir.mkdir(parents=True, exist_ok=True)
-    wavs, durations, starts, all_events = [], [], [], []
-    t0, n = 0.0, len(texts)
-    for i, text in enumerate(texts, 1):
-        print(f"  [Voice:Gemini] {label} block {i}/{n} ({len(text.split())} words)")
-        raw = workdir / f"{label}_{i:02d}_g24.wav"
-        _gemini_wav(text, _mood(label, i, n), raw)
-        conv = workdir / f"{label}_{i:02d}_conv.wav"
+    groups = _chunks(texts)
+    n_scenes = len(texts)
+    chunk_wavs, scene_t, all_events, t0 = [], [None] * n_scenes, [], 0.0
+    for gi, grp in enumerate(groups, 1):
+        text = "\n\n".join(texts[i] for i in grp)
+        print(f"  [Voice:{model}] {label} chunk {gi}/{len(groups)} (scenes {grp[0] + 1}-{grp[-1] + 1}, {len(text.split())} words)")
+        raw = workdir / f"{label}_c{gi:02d}_g24.wav"
+        _gemini_wav(text, _mood(label, grp[0] + 1, n_scenes) if len(grp) == 1 else _mood(label, grp[len(grp) // 2] + 1, n_scenes), raw, model)
+        conv = workdir / f"{label}_c{gi:02d}_conv.wav"
         subprocess.run([FFMPEG, "-y", "-i", str(raw), "-ac", "1", "-ar", str(SAMPLE_RATE), str(conv)],
                        check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         with wave.open(str(conv), "rb") as w:
@@ -256,39 +325,50 @@ def _narrate_gemini(texts: list[str], workdir: Path, label: str) -> dict:
         wpm = len(text.split()) / (dur_speech / 60)
         if wpm < 105:      # safety net: the model sometimes over-applies "slow"; keep the story moving (pitch is preserved)
             factor = min(1.45, 105 / wpm)
-            fast = workdir / f"{label}_{i:02d}_fast.wav"
+            fast = workdir / f"{label}_c{gi:02d}_fast.wav"
             subprocess.run([FFMPEG, "-y", "-i", str(conv), "-af", f"atempo={factor:.3f}", str(fast)],
                            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             conv = fast
             with wave.open(str(conv), "rb") as w:
                 dur_speech = w.getnframes() / w.getframerate()
-            print(f"    [pace] {wpm:.0f} wpm was too slow -> sped x{factor:.2f} ({len(text.split()) / (dur_speech / 60):.0f} wpm)")
+            print(f"    [pace] {wpm:.0f} wpm was too slow -> sped x{factor:.2f}")
         ev = _align_words(text, conv, dur_speech)
         tail = rng.uniform(0.7, 1.0)
-        wav = workdir / f"{label}_{i:02d}.wav"
+        wav = workdir / f"{label}_c{gi:02d}.wav"
         with wave.open(str(conv), "rb") as wi, wave.open(str(wav), "wb") as wo:
             wo.setparams(wi.getparams())
             wo.writeframes(wi.readframes(wi.getnframes()))
             wo.writeframes(b"\x00\x00" * int(SAMPLE_RATE * tail))
-        dur = dur_speech + tail
-        starts.append(t0)
-        durations.append(dur)
+        # scene start = time of the scene's first word inside this chunk
+        idx = 0
+        for i in grp:
+            scene_t[i] = t0 + (ev[idx][0] if idx < len(ev) else 0.0)
+            idx += len(texts[i].split())
+        scene_t[grp[0]] = t0                                  # first scene of a chunk starts at the chunk start
         all_events += [(t0 + s, t0 + e, w) for s, e, w in ev]
-        wavs.append(wav)
-        t0 += dur
+        chunk_wavs.append(wav)
+        t0 += dur_speech + tail
     full = workdir / f"{label}_narration.wav"
-    concat_wavs(wavs, full)
+    concat_wavs(chunk_wavs, full)
+    starts = [float(x) for x in scene_t]
+    durations = [(starts[i + 1] if i + 1 < n_scenes else t0) - starts[i] for i in range(n_scenes)]
     return {"wav": full, "durations": durations, "starts": starts, "events": all_events, "total": t0}
 
 
 def narrate(texts: list[str], workdir: Path, label: str, gap: float = 0.55) -> dict:
-    """Expressive Gemini TTS first; if anything fails (quota, network) the WHOLE video falls back to Edge-TTS so the voice stays consistent."""
+    """Expressive Gemini TTS first (one model per video, rotating through the free models that still have quota today).
+    If every model is exhausted or anything fails, the WHOLE video uses Edge-TTS so the voice stays consistent."""
     from config import GEMINI_API_KEY, TTS_PROVIDER
     if TTS_PROVIDER == "gemini" and GEMINI_API_KEY:
-        try:
-            return _narrate_gemini(texts, workdir, label)
-        except Exception as e:
-            print(f"  [Voice] Gemini TTS unavailable ({str(e)[:140]}); falling back to Edge-TTS for this video")
+        need = len(_chunks(texts))
+        for model in _pick_models(need):
+            try:
+                return _narrate_gemini(texts, workdir, label, model)
+            except QuotaExhausted as e:
+                print(f"  [Voice] {e} daily quota used up; trying the next model")
+            except Exception as e:
+                print(f"  [Voice] Gemini TTS error on {model} ({str(e)[:120]}); trying the next model")
+        print("  [Voice] no Gemini TTS model available today -> Edge-TTS for this video")
     return _narrate_edge(texts, workdir, label, gap)
 
 # ---------------- captions (ASS) ----------------

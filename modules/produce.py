@@ -65,9 +65,10 @@ def produce_episode(story: dict, script: dict, slot_tag: str) -> dict:
     # ---------- shorts ----------
     shorts = []
     for j, sh in enumerate(script["shorts"], 1):
-        prompts_v = sh["visuals"][:SHORT_IMAGES]
-        print(f"[Produce] {sid} short {j}: generating {len(prompts_v)} vertical images...")
-        imgs = images.generate_many(prompts_v, work / f"img_short{j}", f"S{j}", SHORT_SIZE, seed + 1000 * j)
+        # No extra image API calls: re-crop 5 spread-out long-video images to 9:16 (saves ~10 images per episode on the free quota)
+        idxs = [(2 * j + 4 * k) % len(long_imgs) for k in range(SHORT_IMAGES)]
+        print(f"[Produce] {sid} short {j}: re-cropping long-video images {idxs} to vertical...")
+        imgs = images.crop_from_raw([long_imgs[i] for i in idxs], work / f"img_short{j}", f"S{j}", SHORT_SIZE)
         out = outdir / f"{sid}_short{j}.mp4"
         r = _render(f"short{j}", SHORT_SIZE, [sh["narration"]], imgs, [len(imgs)], work, out,
                     seed + j, caption_words=3, upper=True, fade=0.2)

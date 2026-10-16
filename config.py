@@ -42,6 +42,9 @@ GEMINI_MODEL = env("GEMINI_MODEL", "gemini-2.5-flash")
 TTS_PROVIDER = env("TTS_PROVIDER", "gemini")           # gemini | edge
 GEMINI_TTS_MODEL = env("GEMINI_TTS_MODEL", "gemini-3.8-flash-tts")
 GEMINI_TTS_VOICE = env("GEMINI_TTS_VOICE", "Algenib")  # gravelly, older storyteller
+# Free tier = 10 requests/day PER MODEL, so a video uses ONE model and the pipeline rotates through the models that have quota left.
+GEMINI_TTS_MODELS = [m.strip() for m in env("GEMINI_TTS_MODELS", "gemini-3.8-flash-tts,gemini-3.1-flash-tts-preview,gemini-3.8-flash-lite-tts").split(",") if m.strip()]
+GEMINI_TTS_DAILY_LIMIT = int(env("GEMINI_TTS_DAILY_LIMIT", "10"))
 # ---- Voice fallback (Edge-TTS is free, no key) ----
 VOICE_EN = env("VOICE_EN", "en-GB-RyanNeural")   # try en-IN-PrabhatNeural for a South-Asian accent
 VOICE_RATE = env("VOICE_RATE", "-8%")

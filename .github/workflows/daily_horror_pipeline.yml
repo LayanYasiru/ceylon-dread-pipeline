@@ -2,9 +2,9 @@ name: Daily Horror Episodes
 
 on:
   schedule:
-    # 20:30 UTC = 02:00 Sri Lanka. Episodes upload as scheduled/private and go live at PUBLISH_SLOTS_UTC,
-    # which leaves you a review window to delete anything you dislike.
-    - cron: '30 20 * * *'
+    # 00:30 UTC = 06:00 Sri Lanka, just AFTER Cloudflare's free neurons reset (00:00 UTC) so the whole day's quota is available.
+    # Episodes upload as scheduled/private and go live at PUBLISH_SLOTS_UTC (06:30 / 13:30 UTC), leaving a review window.
+    - cron: '30 0 * * *'
   workflow_dispatch:
     inputs:
       count:
@@ -64,7 +64,7 @@ jobs:
         run: |
           git config user.name "horror-bot"
           git config user.email "horror-bot@users.noreply.github.com"
-          git add data/state.json data/scripts data/generated_topics.json || true
+          git add data/state.json data/scripts data/generated_topics.json data/tts_quota.json || true
           git diff --cached --quiet || (git commit -m "chore: update episode state" && git push)
 
       - name: Keep shorts for manual TikTok posting
