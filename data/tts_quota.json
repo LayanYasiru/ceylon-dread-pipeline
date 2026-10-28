@@ -1,7 +1,6 @@
 {
- "day": "2026-10-26",
+ "day": "2026-10-28",
  "calls": {
-  "gemini-3.8-flash-tts": 10,
-  "gemini-3.8-flash-lite-tts": 6
+  "gemini-3.8-flash-tts": 2
  }
 }
